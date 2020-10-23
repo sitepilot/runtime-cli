@@ -14,11 +14,26 @@ jobs:
 
     steps:
       - uses: actions/checkout@v1
+      
       - name: Install composer packages
-        run: composer install --no-dev
+        run: composer install
+      
       - name: Run tests
         run: ./runtime test
       
       - name: Build application 
-        run: ./runtime app:build --build-version= 
+        run: |
+          export VERSION=${GITHUB_REF##*/}
+          ./runtime app:build --build-version=$VERSION
+        if: github.event.release
       
+      - name: Upload application build to release
+        id: upload-release-asset 
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ./build/runtime
+          asset_name: runtime
+          asset_content_type: application/php
