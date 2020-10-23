@@ -37,3 +37,4 @@ jobs:
           asset_path: ./build/runtime
           asset_name: runtime
           asset_content_type: application/php
+        if: github.event.release
