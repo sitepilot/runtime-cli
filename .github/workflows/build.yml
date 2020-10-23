@@ -34,7 +34,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ./build/runtime
+          asset_path: ./builds/runtime
           asset_name: runtime
           asset_content_type: application/php
         if: github.event.release
