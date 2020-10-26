@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Config;
 use LaravelZero\Framework\Commands\Command;
 use LaravelZero\Framework\Exceptions\ConsoleException;
 
-class ConfigGenerate extends Command
+class ConfigGenerateCommand extends Command
 {
     /**
      * The signature of the command.
@@ -54,12 +54,12 @@ class ConfigGenerate extends Command
 
         if ($configFile && file_exists($configFile)) {
             $config = Yaml::parseFile($configFile);
-            Log::info("Loaded default configuration from $configFile");
+            Log::info("Loading default configuration from $configFile");
         }
 
         if ($mergeFile && file_exists($mergeFile)) {
             $mergeConfig = Yaml::parseFile($mergeFile);
-            Log::info("Loaded app configuration from $mergeFile");
+            Log::info("Loading app configuration from $mergeFile");
         }
 
         Log::info("Loading templates from $source");
