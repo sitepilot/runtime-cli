@@ -91,7 +91,11 @@ class ConfigGenerateCommand extends Command
     {
         $merged = $array1;
         foreach ($array2 as $key => &$value) {
-            if (is_array($value) && isset($merged[$key]) && is_array($merged[$key])) {
+            if (
+                is_array($value) &&
+                isset($merged[$key]) && is_array($merged[$key]) &&
+                count(array_filter(array_keys($value), 'is_string')) > 0
+            ) {
                 $merged[$key] = $this->mergeConfig($merged[$key], $value);
             } else {
                 $merged[$key] = $value;
