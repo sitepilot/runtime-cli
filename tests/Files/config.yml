@@ -1,2 +1,2 @@
 nginx:
-  maxRequestSize: 32
+  maxRequestSize: 15

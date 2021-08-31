@@ -21,7 +21,7 @@ class ConfigGenerateCommand extends Command
                             {source : The template source dir}
                             {destination : The template destination dir}
                             {--configFile= : The default configuration file (Yaml)}
-                            {--mergeFile= : Merge configuration file (replaces values of the default configuration) (Yaml)}';
+                            {--mergeFile= : Comma separated list of configuration files (merged with the default configuration) (Yaml)}';
 
     /**
      * The description of the command.
@@ -50,21 +50,23 @@ class ConfigGenerateCommand extends Command
 
         $config = $mergeConfig = [];
         $configFile = $this->option('configFile');
-        $mergeFile = $this->option('mergeFile');
+        $mergeFiles = explode(',', $this->option('mergeFile'));
 
         if ($configFile && file_exists($configFile)) {
             $config = Yaml::parseFile($configFile);
             Log::info("Loading default configuration from $configFile");
         }
 
-        if ($mergeFile && file_exists($mergeFile)) {
-            $mergeConfig = Yaml::parseFile($mergeFile);
-            Log::info("Loading app configuration from $mergeFile");
+        foreach ($mergeFiles as $mergeFile) {
+            if ($mergeFile && file_exists($mergeFile)) {
+                $mergeConfig = Yaml::parseFile($mergeFile);
+                $config = $this->mergeConfig($config, $mergeConfig);
+                Log::info("Loading app configuration from $mergeFile");
+            }
         }
 
         Log::info("Loading templates from $source");
         $files = File::allFiles($source);
-        $config = $this->mergeConfig($config, $mergeConfig);
 
         Log::info("Generating config to $destination");
         foreach ($files as $file) {
