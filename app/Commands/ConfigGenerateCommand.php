@@ -61,7 +61,7 @@ class ConfigGenerateCommand extends Command
             if ($mergeFile && file_exists($mergeFile)) {
                 $mergeConfig = Yaml::parseFile($mergeFile);
                 $config = $this->mergeConfig($config, $mergeConfig);
-                Log::info("Loading app configuration from $mergeFile");
+                Log::info("Loading configuration from $mergeFile");
             }
         }
 
