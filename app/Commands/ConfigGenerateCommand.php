@@ -54,14 +54,17 @@ class ConfigGenerateCommand extends Command
 
         if ($configFile && file_exists($configFile)) {
             $config = Yaml::parseFile($configFile);
-            Log::info("Loading default configuration from $configFile");
+            Log::info("Loading configuration from $configFile");
         }
 
         foreach ($mergeFiles as $mergeFile) {
             if ($mergeFile && file_exists($mergeFile)) {
                 $mergeConfig = Yaml::parseFile($mergeFile);
-                $config = $this->mergeConfig($config, $mergeConfig);
-                Log::info("Loading configuration from $mergeFile");
+
+                if(is_array($mergeConfig)) {
+                    $config = $this->mergeConfig($config, $mergeConfig);
+                    Log::info("Merging configuration from $mergeFile");
+                }
             }
         }
 
